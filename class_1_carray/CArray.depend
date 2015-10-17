@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1442474514 source:c:\project\code block\c\class c++\carray\clibarray.cpp
+	"CLibArray.h"
+
+1442474514 source:c:\project\code block\c\class c++\carray\main.cpp
+	<iostream>
+
+1442474761 c:\project\code block\c\class c++\carray\clibarray.h
+
