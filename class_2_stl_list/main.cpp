@@ -7,20 +7,22 @@ using std::endl;
 
 
 template<class T>
-void dump(list<T> list)
+void dump(list<T>& list)
 {
     node<T>* p=list.begin();
     while(p!=list.end())
     {
         cout<<p->data<<' ';
-        ++p;
+        p=p->next();
     }
     cout<<endl;
 }
 int main()
 {
-    list<int> a;
-    a.push_back(10);
-    dump(a);
+    list<int> a(5,10),b(5,10);
+    a.append(1);
+
+    dump(b);
+    cout<<(a > b);
     return 0;
 }
