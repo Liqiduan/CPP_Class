@@ -1,37 +1,14 @@
-///
-///@file list.h
-///@brief Achieve the basic function of list in STL
-///
-///@version 1.0
-///@author liqiduan(lee.nju@live.com)
-///@date 0:31 10/22/2015
-///
-
-///         START   HERE    ///
 #ifndef LIST_H
 #define LIST_H
 
-///The macro CREATE_DESTORY_COUNT help you to see how many node has been create
-///and how many of them has been destroy
-#define CREATE_DESTORY_COUNT
-
-///For debug
-#ifdef CREATE_DESTORY_COUNT
 #include <iostream>
 using namespace std;
-#endif // CREATE_DESTORY_COUNT
-
 #define NULL 0
-
-///class node<T>
-///@brief class of will be used to create a list.
-///
 template <typename T>
 class node
 {
 public:
     node();
-    ~node();
     node<T>* next();
 
     bool operator == (const node<T>& other) const;
@@ -49,40 +26,17 @@ public:
     //friend class list<T>;
 };
 
-///class list<T>
-///@brief body of list
 template<typename T>
 class list
 {
 public:
-        ///@brief create a list
         list();
-
-        ///@brief create a list contain n elements with data T
-        ///@param n: how many node will be create
-        ///@param t: the data of each node
         list(int n,T t);
-
-        ///@brief create a list copy another list from q1 to q2 [q1,q2)
-        ///@param q1: start
-        ///@param q2: end
-        ///@note this function will do nothing if q1 or q2 is NULL
         list(node<T>* q1,node<T>* q2);
+        virtual ~list();
 
-        ~list();
-
-        ///@brief assign a list
         void assign();
-
-        ///@brief assign a list contain n elements with data T
-        ///@param n: how many node will be create
-        ///@param t: the data of each node
         void assign(int n,T t);
-
-        ///@brief assign a list copy another list from q1 to q2 [q1,q2)
-        ///@param q1: start
-        ///@param q2: end
-        ///@note this function will do nothing if q1 or q2 is NULL
         void assign(node<T>* q1,node<T>* q2);
 
         bool operator == (const list<T>& other) const;
@@ -92,29 +46,17 @@ public:
         bool operator <= (const list<T>& other) const;
         bool operator != (const list<T>& other) const;
 
-        ///@brief return the head of a list
         node<T>* begin();
         const node<T>& begin() const;
-
-        ///@brief return the end of a list
         node<T>* end();
         const node<T>& end() const;
 
-        ///@brief return if the list is empty or not
-        ///@return true:empty
-        ///@return false:nonempty
         bool empty();
-
-        ///@brief clear all the node in list
         void clear();
-        ///@brief return the size of list
         int size();
-        ///@brief swap this and other
         void swap(list& other);
 
-        ///@brief insert a node before current
         node<T>* insert(node<T> *current, T value);
-        ///@brief insert n node with value before current
         void insert(node<T> *current, int num, T value);
         void insert(node<T> *current, node<T> *q1, node<T> *q2);
 
@@ -147,30 +89,14 @@ public:
 template <class T>
 node<T>::node()
 {
-
     data=0;
     _next=NULL;
     _prev=NULL;
-
-    #ifdef CREATE_DESTORY_COUNT
-    static int count=0;
-    count++;
-    cout<<"new node "<<count<<endl;
-    #endif // CREATE_DESTORY_COUNT
 }
 template <class T>
 node<T>* node<T>::next()
 {
     return this->_next;
-}
-template <class T>
-node<T>::~node()
-{
-    #ifdef CREATE_DESTORY_COUNT
-    static int count=0;
-    count++;
-    cout<<"destroy node "<<count<<endl;
-    #endif // CREATE_DESTORY_COUNT
 }
 
 template <class T>
@@ -222,69 +148,33 @@ list<T>::list(int n,T t)
     #ifdef COUNT
     count=n;
     #endif // COUNT
-    node<T> *p,*p1;
-    int i=0;
-
     _end=new node<T>;
     _head=_end;
 
-    if(n==0)
-    {
-        return;
-    }
-
-    p=new node<T>;
-    p->data=t;
-    p1=p;
-    _head=p;
-
-    for(i=1;i<n;++i)
-    {
-       p=new node<T>;
-
-       p->data=t;
-       p->_prev=p1;
-       p1->_next=p;
-
-       p1=p;
-    }
-
-    p->_next=_end;
-    _end->_prev=p;
-
+   int i=0;
+   for(i=0;i<n;++i)
+   {
+       append(t);
+   }
 }
+
 template <class T>
 list<T>::list(node<T>* q1,node<T>* q2)
 {
+    #ifdef COUNT
+     count=0;
+     #endif // COUNT
     _end=new node<T>;
     _head=_end;
 
-    if( (q1==NULL)||(q2==NULL) )
-    {
-        return;
-    }
-
-    node<T> *p,*p1;
-    p=new node<T>;
-    p->data=q1->data;
-    p1=p;
-    _head=p;
-    q1=q1->_next;
-
     while(q1!=q2)
     {
-       p=new node<T>;
-
-       p->data=q1->data;
-       p->_prev=p1;
-       p1->_next=p;
-
-       p1=p;
-       q1=q1->_next;
+        append(q1->data);
+        ++q1;
+        #ifdef COUNT
+        ++count;
+        #endif // COUNT
     }
-
-    p->_next=_end;
-    _end->_prev=p;
 }
 template <class T>
 list<T>::~list()
@@ -295,72 +185,14 @@ list<T>::~list()
 template <class T>
 void list<T>::assign()
 {
-    clear();
 }
 template <class T>
 void list<T>::assign(int n,T t)
 {
-    clear();
-
-    node<T> *p,*p1;
-    int i=0;
-
-    if(n==0)
-    {
-        return;
-    }
-
-    p=new node<T>;
-    p->data=t;
-    p1=p;
-    _head=p;
-
-    for(i=1;i<n;++i)
-    {
-       p=new node<T>;
-
-       p->data=t;
-       p->_prev=p1;
-       p1->_next=p;
-
-       p1=p;
-    }
-
-    p->_next=_end;
-    _end->_prev=p;
-
 }
 template <class T>
 void list<T>::assign(node<T>* q1,node<T>* q2)
 {
-
-    if( (q1==NULL)||(q2==NULL) )
-    {
-        return;
-    }
-
-    clear();
-    node<T> *p,*p1;
-    p=new node<T>;
-    p->data=q1->data;
-    p1=p;
-    _head=p;
-    q1=q1->_next;
-
-    while(q1!=q2)
-    {
-       p=new node<T>;
-
-       p->data=q1->data;
-       p->_prev=p1;
-       p1->_next=p;
-
-       p1=p;
-       q1=q1->_next;
-    }
-
-    p->_next=_end;
-    _end->_prev=p;
 }
 
 template <class T>
@@ -463,7 +295,7 @@ bool list<T>::operator >= (const list<T>& other) const
 template <class T>
 bool list<T>::operator <  (const list<T>& other) const
 {
-    node<T> *p1,*p2;
+       node<T> *p1,*p2;
     int flag=0;
     p1=_head;
     p2=other._head;
@@ -483,7 +315,7 @@ bool list<T>::operator <  (const list<T>& other) const
         p2=p2->_next;
     }
 
-    if((p1==_end))
+    if((p1==other._end))
     {
         if((flag==1)&&(p2=_end))
         {
@@ -967,5 +799,3 @@ void list<T>::splice(node<T> *current, list<T>& other, node<T> *q1, node<T> *q2)
 }
 
 #endif // LIST_H
-
-///         END OF FILE     ///
