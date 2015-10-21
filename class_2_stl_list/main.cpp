@@ -19,10 +19,36 @@ void dump(list<T>& list)
 }
 int main()
 {
-    list<int> a(5,10),b(5,10);
-    a.append(1);
+    list<int> a,b(5,10);
+    list<int> c(b.begin()->next(),b.end());
 
+    int i=0;
+    for(i=0;i<5;++i)
+    {
+        a.append(i);
+    }
+
+    a.resize(10);
+    b.resize(2);
+
+    dump(a);
     dump(b);
-    cout<<(a > b);
+    dump(c);
+
+    cout<<a.size()<<' '<<b.size()<<' '<<c.size()<<endl;
+
+    a.assign();
+    b.assign(5,1);
+    c.assign(b.begin(),b.end());
+
+    dump(a);
+    dump(b);
+    dump(c);
+
+    cout<<a.size()<<' '<<b.size()<<' '<<c.size()<<endl;
+
+
+
+
     return 0;
 }
