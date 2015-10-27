@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1445957994 source:e:\github\cpp_class\class3_list_iterator\main.cpp
+	<iostream>
+	"list.h"
+
+1445958336 e:\github\cpp_class\class3_list_iterator\list.h
+	<stdio.h>
+
